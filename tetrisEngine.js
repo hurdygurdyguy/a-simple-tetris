@@ -43,6 +43,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     timerID = setInterval(moveDown, 1000)
 
+    // Assign functions to keyCodes
+
+    function control(e){
+        if(e.keyCode === 37){
+            moveLeft()
+        } else if(e.keyCode === 38){
+            // rotar
+        } else if(e.keyCode === 39){
+            moveRight()
+        } else if(e.keyCode === 40){
+            moveDown()
+        }
+    }
+
+    document.addEventListener("keyup", control) // Escucha cada vez que se presiona una tecla
+
     function moveDown(){
         undraw()
         currentPosition += width
@@ -60,5 +76,34 @@ document.addEventListener('DOMContentLoaded', () => {
             currentPosition = 4
             draw()
         }
+    }
+
+    // Como mover el tetromino a la izquierda o derecha hasta que se termine la grilla 
+    // o encuentre un obstaculo
+    function moveLeft(){
+        undraw()
+        const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0) // 0,10,20, etc son los vertices izquierdos de la grilla
+        
+        if(!isAtLeftEdge) currentPosition -=1
+
+        if( current.some(index => squares[currentPosition + index].classList.contains("taken"))){
+            currentPosition += 1
+        }
+
+        draw()
+    }
+
+    // Como mover el tetromino a la derecha hasta que termine la grilla
+    function moveRight(){
+        undraw()
+        const isAtRightEdge = current.some(index => (currentPosition + index) % width === width -1) // 9,18,27, etc son los vertices derechos de la grilla
+        
+        if(!isAtRightEdge) currentPosition +=1
+
+        if( current.some(index => squares[currentPosition + index].classList.contains("taken"))){
+            currentPosition -= 1
+        }
+
+        draw()
     }
 })
